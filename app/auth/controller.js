@@ -105,7 +105,7 @@ module.exports = {
     let token;
     if (user) {
       const checkPassword = bcrypt.compareSync(password, user.password)
-      if (checkPassword === password) {
+      if (checkPassword) {
         if (userType === 'student') {
           token = jwt.sign({
             user: {
