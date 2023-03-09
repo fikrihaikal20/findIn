@@ -14,10 +14,11 @@ const filestorage = multer.diskStorage({
 })
 
 const fileFilter = (req, file, cb) => {
-    if (file.mimetype === 'video/mp4') {
-        cb(null, true);
+    if (file.mimetype !== 'video/mp4') {
+        req.fileValidationError = 'Only MP4 videos are allowed';
+        return cb(null, false, new Error('Only MP4 videos are allowed'));
     } else {
-        cb(new Error('Only MP4 videos are allowed'));
+        cb(null, true)
     }
 }
 

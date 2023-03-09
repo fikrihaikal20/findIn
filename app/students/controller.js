@@ -9,11 +9,12 @@ const videos = db.sequelize.models.videos;
 module.exports = {
   postVideo: async (req, res) => {
     try {
-      if (!req.file) {
-        const err = new Error(res.json({ message: `File must be uploaded` }))
-        err.errorStatus = 422;
-        throw err;
+      if (req.fileValidationError) {
+        return res.json({ error: req.fileValidationError });
+      } else if (!req.file) {
+        return res.json({ error: 'Please select a file to upload' });
       }
+
       const { nim } = req.user
       const video = req.file.path
       await videos.create({ video, studentNim: nim })

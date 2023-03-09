@@ -4,6 +4,7 @@ const expertise = db.sequelize.models.expertise;
 const skills = db.sequelize.models.skills;
 const apply = db.sequelize.models.apply;
 const intenjobs = db.sequelize.models.internjobs;
+const fs = require('fs')
 
 module.exports = {
   student: async (req, res) => {
@@ -97,11 +98,12 @@ module.exports = {
   },
   postIntern: async (req, res) => {
     try {
-      if(!req.file){
-        const err = new Error(res.json({ message: `File must be uploaded` }))
-        err.errorStatus = 422;
-        throw err;
+      if (req.fileValidationError) {
+        return res.json({ error: req.fileValidationError });
+      } else if (!req.file) {
+        return res.json({ error: 'Please select a file to upload' });
       }
+
       const { id } = req.user
       const {posisi,perusahaan,lokasi,tipe,jenis,deskripsi,tenggat} = req.body
       const panduan = req.file.path
@@ -127,24 +129,37 @@ module.exports = {
   },
   applyIntern: async (req, res) => {
     try {
-      if(!req.files){
-        const err = new Error(res.json({ message: `File must be uploaded` }))
-        err.errorStatus = 422;
-        throw err;
+      const cvFile = req.files.cv ? req.files.cv[0] : null;
+      const resumeFile = req.files.resume ? req.files.resume[0] : null;
+
+      const deleteFile = (cvFile,resumeFile) => {
+        if (cvFile) fs.unlink(cvFile.path, () => { });
+        if (resumeFile) fs.unlink(resumeFile.path, () => { });
       }
+
+      if (req.fileValidationError) {
+        deleteFile(cvFile, resumeFile)
+        return res.json({ error: req.fileValidationError });
+      } else if (!(cvFile && resumeFile)) {
+        deleteFile(cvFile, resumeFile)
+        return res.json({ error: 'Please select a file to upload' });
+      }
+
       const { nim } = req.user
       const {id} = req.params
-      const cv = req.files['cv'][0].path
-      const resume = req.files['resume'][0].path
-      const input = {
-        cv,
-        resume,
-        internjobId:id,
-        studentNim :nim
+      const cv = cvFile.path
+      const resume = resumeFile.path
+      const [data, created] = await apply.findOrCreate({
+        where: { internjobId: id, studentNim: nim },
+        defaults: { cv, resume }
+      });
+      
+      if (!created) {
+        deleteFile(cvFile, resumeFile)
+        return res.json({ error: 'Duplicate entry' });
       }
-      await apply.create(input);
-      res.json({ message: `Successfully Apply` })
-
+      
+      res.json({ message: `Successfully applied`,data: data });
 
     } catch (err) {
       console.error(err);
