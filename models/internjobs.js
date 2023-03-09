@@ -20,6 +20,10 @@ module.exports = (sequelize) => {
         type: DataTypes.STRING,
         allowNull: false,
     },
+    noTelp: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+    },
     deskripsi: {
         type: DataTypes.STRING,
         allowNull: false,
@@ -40,7 +44,12 @@ module.exports = (sequelize) => {
         values: ['standar','professional'],
         allowNull: false
     },
-    jenis: {
+    metodeKerja: {
+        type: DataTypes.ENUM,
+        values: ['WFH','WFO'],
+        allowNull: false
+    },
+    jenisKerja: {
         type: DataTypes.ENUM,
         values: ['part time','full time'],
         allowNull: false

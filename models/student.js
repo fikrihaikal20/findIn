@@ -43,6 +43,10 @@ module.exports = (sequelize) => {
         type: DataTypes.INTEGER,
         allowNull: false
     },
+    tahunMasuk: {
+        type: DataTypes.INTEGER,
+        allowNull: false
+    },
     deskripsi: {
         type: DataTypes.STRING
     },
@@ -52,13 +56,21 @@ module.exports = (sequelize) => {
     expertise: {
         type: DataTypes.STRING
     },
+    photo: {
+        type: DataTypes.STRING
+    },
+    sertifikat: {
+        type: DataTypes.STRING
+    },
+    cv: {
+        type: DataTypes.STRING
+    },
     isVerified: {
         type: DataTypes.BOOLEAN,
         defaultValue: false,
     }
     }, {
-    freezeTableName: true,
-    timestamps: false,
+    freezeTableName: true
     });
 
     student.associate = function(models) {

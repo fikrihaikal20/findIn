@@ -27,6 +27,9 @@ module.exports = (sequelize) => {
         type: DataTypes.STRING,
         allowNull: false,
     },
+    photo: {
+        type: DataTypes.STRING,
+    },
     limit: {
         type: DataTypes.INTEGER,
         defaultValue: '3',

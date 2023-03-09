@@ -4,6 +4,7 @@ const { Op } = require('sequelize');
 const student = db.sequelize.models.student;
 const apply = db.sequelize.models.apply;
 const internjobs = db.sequelize.models.internjobs;
+const fs = require('fs')
 
 module.exports = {
   viewLowongan: async (req, res) => {
@@ -45,9 +46,17 @@ module.exports = {
   deteleLowongan: async (req, res) => {
     try {
       const { id } = req.params;
+      const data = await internjobs.findOne({
+        where: {
+          id
+        },
+        attributes: ['panduan']
+      });
+
+      fs.unlink(data.panduan, () => { });
       await internjobs.destroy({ where: { id } });
 
-      res.status(200).json({ message: "successfully deleted" })
+      res.status(200).json({ message: "successfully deleted",  })
 
     } catch (err) {
       console.error(err);
