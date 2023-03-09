@@ -11,7 +11,35 @@ const secret = process.env.JWT_SECRET;
 module.exports = {
   signupStudent: async (req, res, next) => {
     try {
-      const { nim, nama, email, noTelp, domisili, universitas, prodi, nik, deskripsi, skills, expertise, password } = req.body;
+      const { 
+        nim, 
+        nama, 
+        email,
+        password, 
+        noTelp, 
+        domisili, 
+        universitas, 
+        prodi,
+        tahunMasuk, 
+        nik, 
+        deskripsi, 
+        skills, 
+        expertise
+      } = req.body;
+
+      if (req.fileValidationError) {
+        return res.json({ error: req.fileValidationError });
+      }
+      
+      let cv = '';
+      let sertifikat = '';
+
+      if (req.files && req.files.cv) {
+          cv = req.files.cv[0].path;
+      }
+      if (req.files && req.files.sertifikat) {
+          sertifikat = req.files.sertifikat[0].path;
+      }
 
       if (!validateEmail(email)) {
         const error = new Error('Email invalid')
@@ -29,7 +57,21 @@ module.exports = {
       const hashedPassword = await bcrypt.hash(password, 10);
 
       const newStudent = await student.create({
-        nim, nama, email, noTelp, domisili, universitas, prodi, nik, deskripsi, skills, expertise, password:hashedPassword
+        nim, 
+        nama, 
+        email,
+        password : hashedPassword, 
+        noTelp, 
+        domisili, 
+        universitas, 
+        prodi,
+        tahunMasuk, 
+        nik, 
+        deskripsi, 
+        skills, 
+        expertise,
+        sertifikat,
+        cv
       })
 
       res.status(201).json({
