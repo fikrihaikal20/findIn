@@ -5,6 +5,7 @@ const skills = db.sequelize.models.skills;
 const apply = db.sequelize.models.apply;
 const internjobs = db.sequelize.models.internjobs;
 const videos = db.sequelize.models.videos;
+const fs = require('fs')
 
 module.exports = {
   postVideo: async (req, res) => {
@@ -31,7 +32,18 @@ module.exports = {
       const { nim } = req.user
       const { nama, universitas, prodi, expertise, skills, deskripsi } = req.body;
 
-      await student.update({ nama, universitas, prodi, expertise, skills, deskripsi }, {
+      const result = await student.findOne({ 
+        where: {nim},
+        attributes: ['photo']
+      })
+
+      let photo = result.photo
+      if (req.file) {
+        fs.unlink(result.photo, () => { });
+        photo = req.file.path
+      }
+
+      await student.update({ nama, universitas, prodi, expertise, skills, deskripsi, photo}, {
         where: { nim }
       });
 

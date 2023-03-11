@@ -3,10 +3,44 @@ const Sequelize = require('sequelize');
 const { Op } = require('sequelize');
 const student = db.sequelize.models.student;
 const apply = db.sequelize.models.apply;
+const employee = db.sequelize.models.employee;
 const internjobs = db.sequelize.models.internjobs;
 const fs = require('fs')
 
 module.exports = {
+  acionEditEmployee: async (req, res) => {
+    try {
+      const { id } = req.user
+      const { username, perusahaan } = req.body;
+
+      const result = await employee.findOne({ 
+        where: { id},
+        attributes: ['photo']
+      })
+
+      let photo = result.photo
+      if (req.file) {
+        fs.unlink(result.photo, () => { });
+        photo = req.file.path
+      }
+
+      if (req.fileValidationError) {
+        return res.json({ error: req.fileValidationError });
+      }
+
+
+
+      await employee.update({ username, perusahaan, photo}, {
+        where: { id }
+      });
+
+      res.status(200).json({ message: 'Successfully made changes' })
+
+    } catch (err) {
+      console.error(err);
+      res.status(500).send('Internal Server Error');
+    }
+  },
   viewLowongan: async (req, res) => {
     try {
       const { id } = req.user

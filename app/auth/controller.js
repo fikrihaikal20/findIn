@@ -15,17 +15,24 @@ module.exports = {
         nim, 
         nama, 
         email,
+        tahunMasuk, 
         password, 
         noTelp, 
         domisili, 
         universitas, 
         prodi,
-        tahunMasuk, 
-        nik, 
-        deskripsi, 
+        nik,
         skills, 
         expertise
       } = req.body;
+
+      const data = await student.findOne({
+        where: { nim }
+      });
+
+      if(data){
+        return res.json({ message: "You have been registered" });
+      }
 
       if (req.fileValidationError) {
         return res.json({ error: req.fileValidationError });
@@ -60,18 +67,17 @@ module.exports = {
         nim, 
         nama, 
         email,
+        tahunMasuk, 
         password : hashedPassword, 
         noTelp, 
         domisili, 
         universitas, 
         prodi,
-        tahunMasuk, 
-        nik, 
-        deskripsi, 
+        nik,
         skills, 
         expertise,
-        sertifikat,
-        cv
+        cv,
+        sertifikat
       })
 
       res.status(201).json({

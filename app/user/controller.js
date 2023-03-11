@@ -3,7 +3,7 @@ const student = db.sequelize.models.student;
 const expertise = db.sequelize.models.expertise;
 const skills = db.sequelize.models.skills;
 const apply = db.sequelize.models.apply;
-const intenjobs = db.sequelize.models.internjobs;
+const internjobs = db.sequelize.models.internjobs;
 const fs = require('fs')
 
 module.exports = {
@@ -22,7 +22,7 @@ module.exports = {
   },
   intern: async (req, res) => {
     try {
-      const data = await intenjobs.findAll({
+      const data = await internjobs.findAll({
         attributes: ['id','posisi','lokasi','perusahaan','jenis']
       });
 
@@ -38,7 +38,7 @@ module.exports = {
     try {
       const {id} = req.params;
 
-      const data = await intenjobs.findOne({
+      const data = await internjobs.findOne({
         where: { id },
         attributes: ['id','posisi','lokasi','perusahaan','jenis','deskripsi','panduan']
       });
@@ -84,7 +84,7 @@ module.exports = {
   findIntern: async (req, res) => {
     try {
       const {jenis, lokasi, posisi} = req.query
-      const data = await intenjobs.findAll({ 
+      const data = await internjobs.findAll({ 
         where: { jenis, lokasi, posisi},
         attributes: ['id','posisi','lokasi','perusahaan','jenis']
       })
@@ -105,7 +105,7 @@ module.exports = {
       }
 
       const { id } = req.user
-      const {posisi,perusahaan,lokasi,tipe,jenis,deskripsi,tenggat} = req.body
+      const {posisi,perusahaan,lokasi,tipe,jenisKerja,deskripsi,metodeKerja,tenggat,noTelp} = req.body
       const panduan = req.file.path
       const input = {
         employeeId: id,
@@ -113,12 +113,14 @@ module.exports = {
         perusahaan,
         lokasi,
         tipe,
-        jenis,
+        jenisKerja,
         deskripsi,
+        metodeKerja,
         tenggat,
+        noTelp,
         panduan
       }
-      await intenjobs.create(input);
+      await internjobs.create(input);
       res.json({ message: `Successfully posted internJobs` })
 
 
