@@ -1,7 +1,5 @@
 const db = require('../../models');
 const student = db.sequelize.models.student;
-const expertise = db.sequelize.models.expertise;
-const skills = db.sequelize.models.skills;
 const apply = db.sequelize.models.apply;
 const internjobs = db.sequelize.models.internjobs;
 const videos = db.sequelize.models.videos;
