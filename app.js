@@ -4,7 +4,9 @@ const app = express()
 const bodyparser = require("body-parser")
 const port = 8016
 const path = require('path')
+const cors = require('cors')
 
+app.use(cors())
 app.use('/documents', express.static(path.join(__dirname, 'public/documents')))
 
 app.use(express.json())
@@ -22,7 +24,7 @@ app.use('/employee', employeesEndpoint)
 
 const db = require('./models')
 
-db.sequelize.sync()
+db.sequelize.sync({ force: true})
   .then(() => {
     app.listen(port, () => {
       console.log(`Server berjalan pada port ${port}`)

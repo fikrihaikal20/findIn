@@ -20,13 +20,15 @@ module.exports = {
       res.json({ message: `Successfully posted video` })
 
 
-    } catch (err) {
-      console.error(err);
-      res.status(500).send('Internal Server Error');
+    }  catch (error) {
+      res.status(500).send({ error: error.message });
     }
   },
   acionEditStudent: async (req, res) => {
     try {
+      if (req.fileValidationError) {
+        return res.json({ error: req.fileValidationError });
+      }
       const { nim } = req.user
       const { nama, universitas, prodi, expertise, skills, deskripsi } = req.body;
 
@@ -35,9 +37,15 @@ module.exports = {
         attributes: ['photo']
       })
 
-      let photo = result.photo
+      let photo = ""
+      if(result !== null){
+        photo = result.photo
+        if (fs.existsSync(photo)) {
+          fs.unlinkSync(photo);
+        }
+      }
+      
       if (req.file) {
-        fs.unlink(result.photo, () => { });
         photo = req.file.path
       }
 
@@ -47,9 +55,8 @@ module.exports = {
 
       res.status(200).json({ message: 'Successfully made changes' })
 
-    } catch (err) {
-      console.error(err);
-      res.status(500).send('Internal Server Error');
+    }  catch (error) {
+      res.status(500).send({ error: error.message });
     }
   },
   dashboardStudent: async (req, res) => {
@@ -76,9 +83,8 @@ module.exports = {
 
       res.status(200).json({ data: result })
 
-    } catch (err) {
-      console.error(err);
-      res.status(500).send('Internal Server Error');
+    }  catch (error) {
+      res.status(500).send({ error: error.message });
     }
   }
 

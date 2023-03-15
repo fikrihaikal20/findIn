@@ -4,29 +4,7 @@ const { student, detailStudent, detailIntern, intern, findIntern, findStudent, p
 const { isLoginUser } = require('../middleware/auth')
 const multer = require('multer')
 const path = require('path');
-
-const filestorage = multer.diskStorage({
-    destination: (req, file, cb) => {
-        cb(null, './public/documents')
-    },
-    filename: (req, file, cb) => {
-        cb(null, new Date().getTime() + " - " + file.originalname)
-    }
-})
-
-const fileFilter = (req, file, cb) => {
-    const filetypes = /pdf/;
-    const mimetype = filetypes.test(file.mimetype);
-    const extname = filetypes.test(
-        path.extname(file.originalname).toLowerCase()
-    );
-    if (!(mimetype && extname)) {
-        req.fileValidationError = 'Only PDF files are allowed';
-        return cb(null, false, new Error('Only PDF files are allowed'));
-    }else{
-        cb(null, true);
-    }
-}
+const { filestorage, fileFilter } = require('../../config/multerConfig')
 
 router.get('/student', student);
 router.get('/Student/:nim', detailStudent);

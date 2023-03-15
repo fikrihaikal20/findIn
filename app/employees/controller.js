@@ -18,9 +18,15 @@ module.exports = {
         attributes: ['photo']
       })
 
-      let photo = result.photo
+      let photo = ""
+      if(result !== null){
+        photo = result.photo
+        if (fs.existsSync(photo)) {
+          fs.unlinkSync(photo);
+        }
+      }
+
       if (req.file) {
-        fs.unlink(result.photo, () => { });
         photo = req.file.path
       }
 
@@ -28,17 +34,14 @@ module.exports = {
         return res.json({ error: req.fileValidationError });
       }
 
-
-
       await employee.update({ username, perusahaan, photo}, {
         where: { id }
       });
 
       res.status(200).json({ message: 'Successfully made changes' })
 
-    } catch (err) {
-      console.error(err);
-      res.status(500).send('Internal Server Error');
+    } catch (error) {
+      res.status(500).send({ error: error.message });
     }
   },
   viewLowongan: async (req, res) => {
@@ -72,9 +75,8 @@ module.exports = {
       res.status(200).json({ data: data1, data2: data2 })
 
 
-    } catch (err) {
-      console.error(err);
-      res.status(500).send('Internal Server Error');
+    } catch (error) {
+      res.status(500).send({ error: error.message });
     }
   },
   deteleLowongan: async (req, res) => {
@@ -92,9 +94,8 @@ module.exports = {
 
       res.status(200).json({ message: "successfully deleted",  })
 
-    } catch (err) {
-      console.error(err);
-      res.status(500).send('Internal Server Error');
+    } catch (error) {
+      res.status(500).send({ error: error.message });
     }
   },
   detailLowongan: async (req, res) => {
@@ -109,9 +110,8 @@ module.exports = {
 
       res.status(200).json({ data: result })
 
-    } catch (err) {
-      console.error(err);
-      res.status(500).send('Internal Server Error');
+    } catch (error) {
+      res.status(500).send({ error: error.message });
     }
   },
   actionEditLowongan: async (req, res) => {
@@ -122,9 +122,8 @@ module.exports = {
 
       res.status(200).json({ message: "successfully updated", data })
 
-    } catch (err) {
-      console.error(err);
-      res.status(500).send('Internal Server Error');
+    } catch (error) {
+      res.status(500).send({ error: error.message });
     }
   },
   applier: async (req, res) => {
@@ -146,9 +145,8 @@ module.exports = {
 
       res.status(200).json({ data: cari })
 
-    } catch (err) {
-      console.error(err);
-      res.status(500).send('Internal Server Error');
+    } catch (error) {
+      res.status(500).send({ error: error.message });
     }
   }
 

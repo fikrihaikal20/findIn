@@ -8,44 +8,41 @@ module.exports = {
   student: async (req, res) => {
     try {
       const data = await student.findAll({
-        attributes: ['nim','nama', 'universitas', 'expertise']
+        attributes: ['nim','nama','universitas','expertise','domisili']
       });
 
       res.status(200).json({ data: data })
 
-    } catch (err) {
-      console.error(err);
-      res.status(500).send('Internal Server Error');
+    } catch (error) {
+      res.status(500).send({ error: error.message });
     }
   },
   intern: async (req, res) => {
     try {
       const data = await internjobs.findAll({
-        attributes: ['id','posisi','lokasi','perusahaan','jenis']
+        attributes: ['id','posisi','lokasi','perusahaan','jenisKerja']
       });
 
       res.status(200).json({ data: data })
 
 
-    } catch (err) {
-      console.error(err);
-      res.status(500).send('Internal Server Error');
+    } catch (error) {
+      res.status(500).send({ error: error.message });
     }
   },
   detailIntern: async (req, res) => {
     try {
       const {id} = req.params;
-
+      console.error(id)
       const data = await internjobs.findOne({
         where: { id },
-        attributes: ['id','posisi','lokasi','perusahaan','jenis','deskripsi','panduan']
+        attributes: ['id','posisi','lokasi','perusahaan','jenisKerja','metodeKerja','deskripsi','panduan']
       });
 
       res.status(200).json({ data: data })
 
-    } catch (err) {
-      console.error(err);
-      res.status(500).send('Internal Server Error');
+    } catch (error) {
+      res.status(500).send({ error: error.message });
     }
   },
   detailStudent: async (req, res) => {
@@ -54,14 +51,13 @@ module.exports = {
 
       const data = await student.findOne({
         where: { nim },
-        attributes: ['nim', 'nama', 'universitas', 'prodi', 'expertise', 'skills', 'deskripsi']
+        attributes: ['nim', 'nama', 'universitas', 'prodi', 'expertise', 'skills', 'deskripsi', 'domisili']
       });
 
       res.status(200).json({ data: data })
 
-    } catch (err) {
-      console.error(err);
-      res.status(500).send('Internal Server Error');
+    } catch (error) {
+      res.status(500).send({ error: error.message });
     }
   },
   findStudent: async (req, res) => {
@@ -74,9 +70,8 @@ module.exports = {
 
       res.status(200).json({ data: data })
 
-    } catch (err) {
-      console.error(err);
-      res.status(500).send('Internal Server Error');
+    } catch (error) {
+      res.status(500).send({ error: error.message });
     }
   },
   findIntern: async (req, res) => {
@@ -89,9 +84,8 @@ module.exports = {
 
       res.status(200).json({ data: data })
 
-    } catch (err) {
-      console.error(err);
-      res.status(500).send('Internal Server Error');
+    } catch (error) {
+      res.status(500).send({ error: error.message });
     }
   },
   postIntern: async (req, res) => {
@@ -122,9 +116,8 @@ module.exports = {
       res.json({ message: `Successfully posted internJobs` })
 
 
-    } catch (err) {
-      console.error(err);
-      res.status(500).send('Internal Server Error');
+    } catch (error) {
+      res.status(500).send({ error: error.message });
     }
   },
   applyIntern: async (req, res) => {
@@ -161,9 +154,8 @@ module.exports = {
       
       res.json({ message: `Successfully applied`,data: data });
 
-    } catch (err) {
-      console.error(err);
-      res.status(500).json({ message: 'Internal Server Error'});
+    } catch (error) {
+      res.status(500).send({ error: error.message });
     }
   }
   

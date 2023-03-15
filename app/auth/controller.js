@@ -166,7 +166,8 @@ module.exports = {
               prodi: user.prodi,
               deskripsi: user.deskripsi,
               skills: user.skills,
-              expertise: user.expertise
+              expertise: user.expertise,
+              role : "student"
             }
           }, secret)
         }else{
@@ -177,7 +178,8 @@ module.exports = {
               email: user.email,
               nama: user.nama,
               perusahaan: user.perusahaan,
-              limit: user.limit
+              limit: user.limit,
+              role : "employee"
             }
           }, secret)
         }

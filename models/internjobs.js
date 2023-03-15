@@ -21,11 +21,11 @@ module.exports = (sequelize) => {
         allowNull: false,
     },
     noTelp: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.BIGINT,
         allowNull: false,
     },
     deskripsi: {
-        type: DataTypes.STRING,
+        type: DataTypes.TEXT,
         allowNull: false,
     },
     tenggat: {
