@@ -105,7 +105,10 @@ module.exports = {
       });
 
       if(data){
-        return res.json({ message: "You have been registered" });
+        const error = new Error('Email have been registered')
+        error.name = 'ValidationError'
+        error.errors = { email: 'Email have been registered' }
+        throw error
       }
 
       const re =/^[^\s@]+@[^\s@]+\.[^\s@]+$/
@@ -119,7 +122,7 @@ module.exports = {
 
       // Validasi password
       if (!validatePassword(password)) {
-        const error = new Error('Password invalid')
+        const error = new Error('password must be unique')
         error.name = 'ValidationError'
         error.errors = { password: 'Password invalid' }
         throw error
