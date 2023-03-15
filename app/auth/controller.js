@@ -100,6 +100,14 @@ module.exports = {
     try {
       const { username, email, password, perusahaan } = req.body;
 
+      const data = await employee.findOne({
+        where: { email }
+      });
+
+      if(data){
+        return res.json({ message: "You have been registered" });
+      }
+
       const re =/^[^\s@]+@[^\s@]+\.[^\s@]+$/
       // Validasi email
       if (!(re.test(email))) {
@@ -110,7 +118,7 @@ module.exports = {
       }
 
       // Validasi password
-      if (!validator.isEmail(email)) {
+      if (!validatePassword(password)) {
         const error = new Error('Password invalid')
         error.name = 'ValidationError'
         error.errors = { password: 'Password invalid' }
