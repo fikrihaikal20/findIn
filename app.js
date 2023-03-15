@@ -4,9 +4,7 @@ const app = express()
 const bodyparser = require("body-parser")
 const port = 8016
 const path = require('path')
-const cors = require('cors')
 
-app.use(cors())
 app.use('/documents', express.static(path.join(__dirname, 'public/documents')))
 
 app.use(express.json())
