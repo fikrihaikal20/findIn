@@ -4,6 +4,7 @@ const apply = db.sequelize.models.apply;
 const internjobs = db.sequelize.models.internjobs;
 const videos = db.sequelize.models.videos;
 const fs = require('fs')
+const _ = require('lodash')
 
 module.exports = {
   postVideo: async (req, res) => {
@@ -66,22 +67,23 @@ module.exports = {
         where: {
           studentNim: nim
         },
-        include: {
-          model: internjobs,
-          required: false
-        }
+        include: [
+          {
+            model: internjobs,
+            required: false,
+            attributes: ['perusahaan','posisi']
+          }
+        ],
+        attributes: ['status']
+      });
+      
+      const newData = cari.map(d => {
+        const { perusahaan, posisi } = d.internjob;
+        const { status } = d;
+        return { perusahaan, posisi, status };
       });
 
-      let result = {};
-      cari.forEach(item => {
-        result[item.id] = {
-          posisi: item.internjob.posisi,
-          perusahaan: item.internjob.perusahaan,
-          status: item.internjob.status
-        }
-      });
-
-      res.status(200).json({ data: result })
+      res.status(200).json({ data: newData })
 
     }  catch (error) {
       res.status(500).send({ error: error.message });

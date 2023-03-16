@@ -40,7 +40,8 @@ const fileFilter = (req, file, cb) => {
   } else if (
     file.fieldname === "cv" ||
     file.fieldname === "panduan" ||
-    file.fieldname === "resume") {
+    file.fieldname === "resume" ||
+    file.fieldname === "sertifikat") {
       if (file.mimetype !== 'application/pdf') {
           req.fileValidationError = 'Only PDF files are allowed';
           return cb(null, false, new Error('Only PDF files are allowed'));

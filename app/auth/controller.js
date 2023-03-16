@@ -3,26 +3,28 @@ const jwt = require('jsonwebtoken')
 const bcrypt = require('bcrypt')
 const validator = require('validator');
 const { validateEmail, validatePassword } = require('../helpers/validation')
+const nodemailer = require('nodemailer');
 const student = db.sequelize.models.student;
 const employee = db.sequelize.models.employee;
+const token = db.sequelize.models.token;
 
 const secret = process.env.JWT_SECRET;
 
 module.exports = {
   signupStudent: async (req, res, next) => {
     try {
-      const { 
-        nim, 
-        nama, 
+      const {
+        nim,
+        nama,
         email,
-        tahunMasuk, 
-        password, 
-        noTelp, 
-        domisili, 
-        universitas, 
+        tahunMasuk,
+        password,
+        noTelp,
+        domisili,
+        universitas,
         prodi,
         nik,
-        skills, 
+        skills,
         expertise
       } = req.body;
 
@@ -30,22 +32,22 @@ module.exports = {
         where: { nim }
       });
 
-      if(data){
+      if (data) {
         return res.json({ message: "You have been registered" });
       }
 
       if (req.fileValidationError) {
         return res.json({ error: req.fileValidationError });
       }
-      
+
       let cv = '';
       let sertifikat = '';
 
       if (req.files && req.files.cv) {
-          cv = req.files.cv[0].path;
+        cv = req.files.cv[0].path;
       }
       if (req.files && req.files.sertifikat) {
-          sertifikat = req.files.sertifikat[0].path;
+        sertifikat = req.files.sertifikat[0].path;
       }
 
       if (!validateEmail(email)) {
@@ -64,17 +66,17 @@ module.exports = {
       const hashedPassword = await bcrypt.hash(password, 10);
 
       const newStudent = await student.create({
-        nim, 
-        nama, 
+        nim,
+        nama,
         email,
-        tahunMasuk, 
-        password : hashedPassword, 
-        noTelp, 
-        domisili, 
-        universitas, 
+        tahunMasuk,
+        password: hashedPassword,
+        noTelp,
+        domisili,
+        universitas,
         prodi,
         nik,
-        skills, 
+        skills,
         expertise,
         cv,
         sertifikat
@@ -92,8 +94,9 @@ module.exports = {
           message: err.message,
           fields: err.errors
         })
+      }else{
+        res.status(500).send({ error: err.message });
       }
-      next(err)
     }
   },
   signupEmployee: async (req, res, next) => {
@@ -104,14 +107,14 @@ module.exports = {
         where: { email }
       });
 
-      if(data){
+      if (data) {
         const error = new Error('Email have been registered')
         error.name = 'ValidationError'
         error.errors = { email: 'Email have been registered' }
         throw error
       }
 
-      const re =/^[^\s@]+@[^\s@]+\.[^\s@]+$/
+      const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
       // Validasi email
       if (!(re.test(email))) {
         const error = new Error('Email invalid')
@@ -178,10 +181,10 @@ module.exports = {
               deskripsi: user.deskripsi,
               skills: user.skills,
               expertise: user.expertise,
-              role : "student"
+              role: "student"
             }
           }, secret)
-        }else{
+        } else {
           token = jwt.sign({
             user: {
               id: user.id,
@@ -190,12 +193,12 @@ module.exports = {
               nama: user.nama,
               perusahaan: user.perusahaan,
               limit: user.limit,
-              role : "employee"
+              role: "employee"
             }
           }, secret)
         }
         res.status(200).json({
-          data: { token , message: "Successfully logged in" },
+          data: { token, message: "Successfully logged in" },
         })
 
       } else {
