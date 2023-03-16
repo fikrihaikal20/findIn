@@ -31,6 +31,14 @@ module.exports = {
       })
       next(err)
     }
-
-  }
+  },
+  isLoginAdmin: (req, res, next) => {
+    if (req.session.admin === null || req.session.admin === undefined) {
+      req.flash('alertMessage', `Mohon maaf session anda telah habis silahkan login kembali`)
+      req.flash('alertStatus', 'danger')
+      res.redirect('/')
+    } else {
+      next()
+    }
+  },
 }

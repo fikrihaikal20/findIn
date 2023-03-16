@@ -1,0 +1,34 @@
+<table id="example2" class="table table-bordered table-hover">
+  <thead>
+  <tr>
+    <th>id</th>
+    <th>posisi</th>
+    <th>tenggat</th>
+    <th>status</th>
+    <th>Ubah status</th>
+  </tr>
+  </thead>
+  <tbody>
+    <% for(let i = 0; i < data.length; i++){ %>
+      <tr>
+        <td><%= data[i].id %></td>
+        <td><%= data[i].posisi %></td>
+        <td><%= data[i].tenggat %></td>
+        <td><%= data[i].status %></td>
+        <td>
+          <form action="/statusLowongan/<%= data[i].id %>" method="POST" style="display: inline-block;">
+            <input type="hidden" name="_method" value="PUT">
+            <button type="submit" class="btn btn-info btn-sm" name="status" value="diterima">
+              <i class=""></i>
+              Diterima
+            </button>
+            <button type="submit" class="btn btn-danger btn-sm" name="status" value="ditolak">
+              <i class=""></i>
+              Ditolak
+            </button>
+          </form>
+        </td>
+      </tr>
+    <% } %>
+  </tbody>
+</table>

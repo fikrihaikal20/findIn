@@ -1,0 +1,36 @@
+<table id="example2" class="table table-bordered table-hover">
+  <thead>
+  <tr>
+    <th>nim</th>
+    <th>nama</th>
+    <th>email</th>
+    <th>nik</th>
+    <th>isVerified</th>
+    <th>Ubah Status</th>
+  </tr>
+  </thead>
+  <tbody>
+    <% for(let i = 0; i < data.length; i++){ %>
+      <tr>
+        <td><%= data[i].nim %></td>
+        <td><%= data[i].nama %></td>
+        <td><%= data[i].email %></td>
+        <td><%= data[i].nik %></td>
+        <td><%= data[i].isVerified %></td>
+        <td>
+          <form action="/statusStudent/<%= data[i].nim %>" method="POST" style="display: inline-block;">
+            <input type="hidden" name="_method" value="PUT">
+            <button type="submit" class="btn btn-info btn-sm" name="isVerified" value="true">
+              <i class=""></i>
+              Diterima
+            </button>
+            <button type="submit" class="btn btn-danger btn-sm" name="isVerified" value="false">
+              <i class=""></i>
+              Ditolak
+            </button>
+          </form>
+        </td>
+      </tr>
+    <% } %>
+  </tbody>
+</table>
