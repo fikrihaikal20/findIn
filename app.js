@@ -36,7 +36,7 @@ app.use('/employee', employeesEndpoint)
 
 const db = require('./models')
 
-db.sequelize.sync({ force: true })
+db.sequelize.sync({force: true})
   .then(() => {
     app.listen(port, () => {
       console.log(`Server berjalan pada port ${port}`)

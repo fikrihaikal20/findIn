@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-const { viewLowongan,deteleLowongan,detailLowongan,actionEditLowongan,applier,acionEditEmployee,subscribe} = require('./controller')
+const { viewLowongan,deteleLowongan,detailLowongan,actionEditLowongan,applier,acionEditEmployee,subscribe,pilihApplier} = require('./controller')
 const { isLoginUser } = require('../middleware/auth')
 const multer = require('multer')
 const { filestorage, fileFilter } = require('../../config/multerConfig')
@@ -13,6 +13,7 @@ router.delete('/lowongan/:id', isLoginUser('employee'), deteleLowongan);
 router.get('/lowongan/:id', isLoginUser('employee'), detailLowongan);
 router.put('/lowongan/:id', isLoginUser('employee'), actionEditLowongan);
 router.get('/applier/', isLoginUser('employee'), applier);
+router.put('/pilihApplier/:nim', isLoginUser('employee'), pilihApplier);
 
 router.put('/subscribe/', isLoginUser('employee'), subscribe);
 

@@ -149,6 +149,21 @@ module.exports = {
       res.status(500).send({ error: error.message });
     }
   },
+  pilihApplier: async (req, res) => {
+    try {
+      const { nim } = req.params
+      const result = await apply.update(
+        { status: "diterima" },
+        { where:  {studentNim : nim}  }
+      );
+
+      console.log(result)
+      res.status(200).json({ data: result })
+
+    } catch (error) {
+      res.status(500).send({ error: error.message });
+    }
+  },
   subscribe: async (req, res) => {
     try {
       const { id } = req.user
