@@ -7,6 +7,7 @@
     <th>nik</th>
     <th>isVerified</th>
     <th>Ubah Status</th>
+    <th>aksi</th>
   </tr>
   </thead>
   <tbody>
@@ -27,6 +28,15 @@
             <button type="submit" class="btn btn-danger btn-sm" name="isVerified" value="false">
               <i class=""></i>
               Ditolak
+            </button>
+          </form>
+        </td>
+        <td>
+          <form action="/hapusStudent/<%= data[i].nim %>" method="POST" style="display: inline-block;">
+            <input type="hidden" name="_method" value="PUT">
+            <button type="submit" class="btn btn-danger btn-sm" name="status" value="diterima">
+              <i class=""></i>
+              Delete
             </button>
           </form>
         </td>

@@ -1,0 +1,36 @@
+<%- include ('../../partials/header.ejs') %>
+<%- include ('../../partials/navbar.ejs') %>
+<%- include ('../../partials/sidebar.ejs') %>
+<div class="content-wrapper">
+  <!-- Content Header (Page header) -->
+  <section class="content-header">
+    <div class="container-fluid">
+      <%- include ('../../partials/message.ejs') %>
+    </div><!-- /.container-fluid -->
+  </section>
+
+  <!-- Main content -->
+  <section class="content">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-12">
+          <div class="card">
+            <!-- /.card-header -->
+            <div class="card-body">
+              <%- include ('./table.ejs') %>
+            </div>
+            <!-- /.card-body -->
+          </div>
+          <!-- /.card -->
+          <!-- /.card -->
+        </div>
+        <!-- /.col -->
+      </div>
+      <!-- /.row -->
+    </div>
+    <!-- /.container-fluid -->
+  </section>
+  <!-- /.content -->
+</div>
+
+<%- include ('../../partials/js.ejs') %>

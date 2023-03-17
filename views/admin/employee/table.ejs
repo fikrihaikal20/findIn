@@ -1,0 +1,32 @@
+<table id="example2" class="table table-bordered table-hover">
+  <thead>
+  <tr>
+    <th>id</th>
+    <th>username</th>
+    <th>email</th>
+    <th>perusahaan</th>
+    <th>limit</th>
+    <th>aksi</th>
+  </tr>
+  </thead>
+  <tbody>
+    <% for(let i = 0; i < data.length; i++){ %>
+      <tr>
+        <td><%= data[i].id %></td>
+        <td><%= data[i].username %></td>
+        <td><%= data[i].email %></td>
+        <td><%= data[i].perusahaan %></td>
+        <td><%= data[i].limit %></td>
+        <td>
+          <form action="/hapusEmployee/<%= data[i].id %>" method="POST" style="display: inline-block;">
+            <input type="hidden" name="_method" value="PUT">
+            <button type="submit" class="btn btn-danger btn-sm" name="status" value="diterima">
+              <i class=""></i>
+              Delete
+            </button>
+          </form>
+        </td>
+      </tr>
+    <% } %>
+  </tbody>
+</table>

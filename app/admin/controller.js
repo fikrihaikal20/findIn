@@ -1,6 +1,7 @@
 const db = require('../../models');
 const internjobs = db.sequelize.models.internjobs;
 const student = db.sequelize.models.student;
+const employee = db.sequelize.models.employee;
 
 module.exports = {
   viewSignin: async (req, res) => {
@@ -42,7 +43,7 @@ module.exports = {
     const alert = { message: alertMessage, status: alertStatus}
 
     const data = await internjobs.findAll({
-      attributes: ['id', 'posisi', 'tenggat', 'status']
+      attributes: ['id', 'posisi', 'tenggat', 'status', 'tipe', 'noTelp']
     });
 
      
@@ -61,6 +62,20 @@ module.exports = {
 
      
     res.render('admin/student/view_student',{data, alert})
+  },
+  employee : async (req, res)=>{
+
+    const alertMessage = req.flash("alertMessage")
+    const alertStatus = req.flash("alertStatus")
+
+    const alert = { message: alertMessage, status: alertStatus}
+
+    const data = await employee.findAll({
+      attributes: ['id', 'username', 'perusahaan','limit','email']
+    });
+
+     
+    res.render('admin/employee/view_employee',{data, alert})
   },
   statusLowongan : async (req, res)=>{
      
@@ -99,6 +114,45 @@ module.exports = {
       req.flash('alertStatus', "success")
 
       res.redirect('/student');
+    } catch (error) {
+      console.log(error);
+      res.send('Terjadi kesalahan');
+    }
+  },
+  hapusLowongan : async (req, res)=>{
+    const id = req.params.id;
+    try {
+      await internjobs.destroy({ where: { id } })
+      req.flash('alertMessage', "Successfully Deleted")
+      req.flash('alertStatus', "success")
+
+      res.redirect('/lowongan');
+    } catch (error) {
+      console.log(error);
+      res.send('Terjadi kesalahan');
+    }
+  },
+  hapusStudent : async (req, res)=>{
+    const nim = req.params.nim;
+    try {
+      await student.destroy({ where: { nim } })
+      req.flash('alertMessage', "Successfully Deleted")
+      req.flash('alertStatus', "success")
+
+      res.redirect('/student');
+    } catch (error) {
+      console.log(error);
+      res.send('Terjadi kesalahan');
+    }
+  },
+  hapusEmployee : async (req, res)=>{
+    const id = req.params.nim;
+    try {
+      await employee.destroy({ where: { id } })
+      req.flash('alertMessage', "Successfully Deleted")
+      req.flash('alertStatus', "success")
+
+      res.redirect('/employee');
     } catch (error) {
       console.log(error);
       res.send('Terjadi kesalahan');

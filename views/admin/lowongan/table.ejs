@@ -3,9 +3,11 @@
   <tr>
     <th>id</th>
     <th>posisi</th>
-    <th>tenggat</th>
+    <th>tipe</th>
+    <th>No Telp</th>
     <th>status</th>
     <th>Ubah status</th>
+    <th>aksi</th>
   </tr>
   </thead>
   <tbody>
@@ -13,7 +15,12 @@
       <tr>
         <td><%= data[i].id %></td>
         <td><%= data[i].posisi %></td>
-        <td><%= data[i].tenggat %></td>
+        <td><%= data[i].tipe %></td>
+        <td>
+          <a href="https://api.whatsapp.com/send?phone=62<%= data[i].noTelp %>" target="_blank" class="btn btn-success btn-sm">
+            <i class="fab fa-whatsapp" ></i> <%= data[i].noTelp %>
+          </a>
+        </td>
         <td><%= data[i].status %></td>
         <td>
           <form action="/statusLowongan/<%= data[i].id %>" method="POST" style="display: inline-block;">
@@ -25,6 +32,15 @@
             <button type="submit" class="btn btn-danger btn-sm" name="status" value="ditolak">
               <i class=""></i>
               Ditolak
+            </button>
+          </form>
+        </td>
+        <td>
+          <form action="/hapusLowongan/<%= data[i].id %>" method="POST" style="display: inline-block;">
+            <input type="hidden" name="_method" value="PUT">
+            <button type="submit" class="btn btn-danger btn-sm" name="status" value="diterima">
+              <i class=""></i>
+              Delete
             </button>
           </form>
         </td>

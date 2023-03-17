@@ -148,6 +148,19 @@ module.exports = {
     } catch (error) {
       res.status(500).send({ error: error.message });
     }
-  }
+  },
+  subscribe: async (req, res) => {
+    try {
+      const { id } = req.user
+      const result = await employee.update(
+        { limit: Infinity },
+        { where:  {id}  }
+      );
 
+      res.status(200).json({ data: result, message: "Subscribe Berhasil" })
+
+    } catch (error) {
+      res.status(500).send({ error: error.message });
+    }
+  }
 }
