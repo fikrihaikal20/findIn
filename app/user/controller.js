@@ -177,7 +177,7 @@ module.exports = {
       if (req.fileValidationError) {
         return res.status(422).json({ error: req.fileValidationError })
       } else if (!req.file) {
-        return res.status(400).json({ error: 'Please select a file to upload' })
+        return res.status(400).json({ error: 'Silakan pilih file yang akan diunggah.' })
       }
 
       const { id } = req.user

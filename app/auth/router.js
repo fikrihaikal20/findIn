@@ -2,7 +2,6 @@ var express = require('express');
 var router = express.Router();
 const { signupStudent, signupEmployee, signin} = require('./controller')
 const multer = require('multer')
-const path = require('path')
 const { filestorage, fileFilter } = require('../../config/multerConfig')
 
 router.post('/signup/student', multer({ storage: filestorage, fileFilter: fileFilter }).fields([

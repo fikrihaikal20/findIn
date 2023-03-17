@@ -3,7 +3,6 @@ var router = express.Router();
 const { student, detailStudent, detailIntern, intern, findIntern, findStudent, postIntern, applyIntern } = require('./controller')
 const { isLoginUser } = require('../middleware/auth')
 const multer = require('multer')
-const path = require('path');
 const { filestorage, fileFilter } = require('../../config/multerConfig')
 
 

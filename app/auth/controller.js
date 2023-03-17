@@ -1,12 +1,9 @@
 const db = require('../../models')
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcrypt')
-const validator = require('validator');
 const { validateEmail, validatePassword } = require('../helpers/validation')
-const nodemailer = require('nodemailer');
 const student = db.sequelize.models.student;
 const employee = db.sequelize.models.employee;
-const token = db.sequelize.models.token;
 
 const secret = process.env.JWT_SECRET;
 
@@ -33,7 +30,7 @@ module.exports = {
       });
 
       if (data) {
-        return res.status(409).json({ message: "You have been registered" });
+        return res.status(409).json({ message: "Anda telah terdaftar" });
       }
 
       if (req.fileValidationError) {
@@ -51,16 +48,16 @@ module.exports = {
       }
 
       if (!validateEmail(email)) {
-        const error = new Error('Email invalid')
+        const error = new Error('Gunakan alamat email yang benar')
         error.name = 'ValidationError'
-        error.errors = { email: 'Email invalid' }
+        error.errors = { email: 'Gunakan alamat email yang benar' }
         throw error
       }
 
       if (!validatePassword(password)) {
-        const error = new Error('Password invalid')
+        const error = new Error('Password harus unique')
         error.name = 'ValidationError'
-        error.errors = { password: 'Password invalid' }
+        error.errors = { password: 'Password harus unique' }
         throw error
       }
       const hashedPassword = await bcrypt.hash(password, 10);
@@ -83,7 +80,7 @@ module.exports = {
       })
 
       res.status(201).json({
-        message: 'Successfully created account',
+        message: 'Berhasil membuat akun',
         data: newStudent
       })
 
@@ -104,26 +101,26 @@ module.exports = {
       });
 
       if (data) {
-        const error = new Error('Email have been registered')
+        const error = new Error('Email telah terdaftar')
         error.name = 'ValidationError'
-        error.errors = { email: 'Email have been registered' }
+        error.errors = { email: 'Email telah terdaftar' }
         throw error
       }
 
       const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
       // Validasi email
       if (!(re.test(email))) {
-        const error = new Error('Email invalid')
+        const error = new Error('Gunakan alamat email yang benar')
         error.name = 'ValidationError'
-        error.errors = { email: 'Email invalid' }
+        error.errors = { email: 'Gunakan alamat email yang benar' }
         throw error
       }
 
       // Validasi password
       if (!validatePassword(password)) {
-        const error = new Error('password must be unique')
+        const error = new Error('Password harus unique')
         error.name = 'ValidationError'
-        error.errors = { password: 'Password invalid' }
+        error.errors = { password: 'Password harus unique' }
         throw error
       }
 
@@ -135,7 +132,7 @@ module.exports = {
       })
 
       res.status(201).json({
-        message: 'Successfully created account',
+        message: 'Berhasil membuat akun',
         data: newEmployee
       })
 
@@ -191,17 +188,17 @@ module.exports = {
             }, secret)
           }
           res.status(200).json({
-            data: { token, message: "Successfully logged in" },
+            data: { token, message: "Berhasil Log in" },
           })
 
         } else {
           res.status(401).json({
-            message: 'password incorrect'
+            message: 'Password salah'
           })
         }
       } else {
         res.status(404).json({
-          message: 'Email is not registered yet'
+          message: 'Email belum terdaftar'
         })
       }
     } catch (error) {

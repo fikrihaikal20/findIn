@@ -4,7 +4,6 @@ const apply = db.sequelize.models.apply;
 const internjobs = db.sequelize.models.internjobs;
 const videos = db.sequelize.models.videos;
 const fs = require('fs')
-const _ = require('lodash')
 
 module.exports = {
   postVideo: async (req, res) => {
@@ -12,13 +11,13 @@ module.exports = {
       if (req.fileValidationError) {
         return res.status(422).json({ error: req.fileValidationError })
       } else if (!req.file) {
-        return res.status(400).json({ error: 'Please select a file to upload' })
+        return res.status(400).json({ error: 'Silakan pilih file yang akan diunggah.' })
       }
 
       const { nim } = req.user
       const video = req.file.path
       await videos.create({ video, studentNim: nim })
-      res.status(200).json({ message: `Successfully posted video` })
+      res.status(200).json({ message: `Success post video` })
 
 
     }  catch (error) {
@@ -54,7 +53,7 @@ module.exports = {
         where: { nim }
       })
 
-      res.status(200).json({ message: 'Successfully made changes' })
+      res.status(200).json({ message: 'Success melakukan perubahan' })
 
     }  catch (error) {
       res.status(500).send({ error: error.message });
