@@ -31,7 +31,7 @@ module.exports = {
       }
 
       if (req.fileValidationError) {
-        return res.json({ error: req.fileValidationError });
+        return res.status(422).json({ error: req.fileValidationError });
       }
 
       await employee.update({ username, perusahaan, photo}, {

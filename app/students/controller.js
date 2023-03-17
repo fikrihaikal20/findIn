@@ -10,28 +10,28 @@ module.exports = {
   postVideo: async (req, res) => {
     try {
       if (req.fileValidationError) {
-        return res.json({ error: req.fileValidationError });
+        return res.status(422).json({ error: req.fileValidationError })
       } else if (!req.file) {
-        return res.json({ error: 'Please select a file to upload' });
+        return res.status(400).json({ error: 'Please select a file to upload' })
       }
 
       const { nim } = req.user
       const video = req.file.path
       await videos.create({ video, studentNim: nim })
-      res.json({ message: `Successfully posted video` })
+      res.status(200).json({ message: `Successfully posted video` })
 
 
     }  catch (error) {
-      res.status(500).send({ error: error.message });
+      res.status(500).send({ error: error.message })
     }
   },
   acionEditStudent: async (req, res) => {
     try {
       if (req.fileValidationError) {
-        return res.json({ error: req.fileValidationError });
+        return res.status(422).json({ error: req.fileValidationError });
       }
       const { nim } = req.user
-      const { nama, universitas, prodi, expertise, skills, deskripsi } = req.body;
+      const { nama, universitas, prodi, expertise, skills, deskripsi } = req.body
 
       const result = await student.findOne({ 
         where: {nim},
@@ -42,7 +42,7 @@ module.exports = {
       if(result !== null){
         photo = result.photo
         if (fs.existsSync(photo)) {
-          fs.unlinkSync(photo);
+          fs.unlinkSync(photo)
         }
       }
       
@@ -52,7 +52,7 @@ module.exports = {
 
       await student.update({ nama, universitas, prodi, expertise, skills, deskripsi, photo}, {
         where: { nim }
-      });
+      })
 
       res.status(200).json({ message: 'Successfully made changes' })
 
@@ -75,13 +75,13 @@ module.exports = {
           }
         ],
         attributes: ['status']
-      });
+      })
       
       const newData = cari.map(d => {
-        const { perusahaan, posisi } = d.internjob;
-        const { status } = d;
-        return { perusahaan, posisi, status };
-      });
+        const { perusahaan, posisi } = d.internjob
+        const { status } = d
+        return { perusahaan, posisi, status }
+      })
 
       res.status(200).json({ data: newData })
 

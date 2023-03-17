@@ -6,6 +6,7 @@ const multer = require('multer')
 const path = require('path');
 const { filestorage, fileFilter } = require('../../config/multerConfig')
 
+
 router.get('/student', student);
 router.get('/Student/:nim', detailStudent);
 router.post('/student', findStudent);

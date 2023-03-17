@@ -33,11 +33,11 @@ module.exports = {
       });
 
       if (data) {
-        return res.json({ message: "You have been registered" });
+        return res.status(409).json({ message: "You have been registered" });
       }
 
       if (req.fileValidationError) {
-        return res.json({ error: req.fileValidationError });
+        return res.status(422).json({ error: req.fileValidationError });
       }
 
       let cv = '';
@@ -87,15 +87,11 @@ module.exports = {
         data: newStudent
       })
 
-    } catch (err) {
-      if (err && err.name === "ValidationError") {
-        return res.status(422).json({
-          error: 1,
-          message: err.message,
-          fields: err.errors
-        })
-      }else{
-        res.status(500).send({ error: err.message });
+    } catch (error) {
+      if (error && error.name === "ValidationError") {
+        return res.status(422).json({message: error.message})
+      } else {
+        res.status(500).send({ error: error.message });
       }
     }
   },
@@ -143,73 +139,73 @@ module.exports = {
         data: newEmployee
       })
 
-    } catch (err) {
-      if (err && err.name === "ValidationError") {
-        return res.status(422).json({
-          error: 1,
-          message: err.message,
-          fields: err.errors
-        })
+    } catch (error) {
+      if (error && error.name === "ValidationError") {
+        return res.status(422).json({ message: error.message })
       }
-      next(err)
+      next(error)
     }
   },
   signin: async (req, res, next) => {
-    const { email, password, userType } = req.body;
+    try {
+      const { email, password, userType } = req.body;
 
-    let user;
-    if (userType === 'student') {
-      user = await student.findOne({ where: { email } });
-    } else if (userType === 'employee') {
-      user = await employee.findOne({ where: { email } });
-    }
+      let user;
+      if (userType === 'student') {
+        user = await student.findOne({ where: { email } });
+      } else if (userType === 'employee') {
+        user = await employee.findOne({ where: { email } });
+      }
 
-    let token;
-    if (user) {
-      const checkPassword = bcrypt.compareSync(password, user.password)
-      if (checkPassword) {
-        if (userType === 'student') {
-          token = jwt.sign({
-            user: {
-              nim: user.nim,
-              nama: user.nama,
-              email: user.email,
-              noTelp: user.noTelp,
-              domisili: user.phoneNumber,
-              universitas: user.universitas,
-              prodi: user.prodi,
-              deskripsi: user.deskripsi,
-              skills: user.skills,
-              expertise: user.expertise,
-              role: "student"
-            }
-          }, secret)
+      let token;
+      if (user) {
+        const checkPassword = bcrypt.compareSync(password, user.password)
+        if (checkPassword) {
+          if (userType === 'student') {
+            token = jwt.sign({
+              user: {
+                nim: user.nim,
+                nama: user.nama,
+                email: user.email,
+                noTelp: user.noTelp,
+                domisili: user.phoneNumber,
+                universitas: user.universitas,
+                prodi: user.prodi,
+                deskripsi: user.deskripsi,
+                skills: user.skills,
+                expertise: user.expertise,
+                role: "student"
+              }
+            }, secret)
+          } else {
+            token = jwt.sign({
+              user: {
+                id: user.id,
+                username: user.username,
+                email: user.email,
+                nama: user.nama,
+                perusahaan: user.perusahaan,
+                limit: user.limit,
+                role: "employee"
+              }
+            }, secret)
+          }
+          res.status(200).json({
+            data: { token, message: "Successfully logged in" },
+          })
+
         } else {
-          token = jwt.sign({
-            user: {
-              id: user.id,
-              username: user.username,
-              email: user.email,
-              nama: user.nama,
-              perusahaan: user.perusahaan,
-              limit: user.limit,
-              role: "employee"
-            }
-          }, secret)
+          res.status(401).json({
+            message: 'password incorrect'
+          })
         }
-        res.status(200).json({
-          data: { token, message: "Successfully logged in" },
-        })
-
       } else {
-        res.status(403).json({
-          message: 'password incorrect'
+        res.status(404).json({
+          message: 'Email is not registered yet'
         })
       }
-    } else {
-      res.status(403).json({
-        message: 'Email is not registered yet'
-      })
+    } catch (error) {
+      res.status(500).send({ error: error.message });
     }
   }
 }
